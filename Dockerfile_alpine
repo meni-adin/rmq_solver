@@ -1,0 +1,19 @@
+FROM alpine:3.19.0
+
+RUN apk add make=4.4.1-r2
+RUN apk add cmake=3.27.8-r0
+RUN apk add gcc=13.2.1_git20231014-r0
+RUN apk add libc-dev=0.7.2-r5
+RUN apk add python3=3.11.6-r1
+RUN apk add openjdk21=21.0.1_p12-r0
+RUN apk add gradle=8.5-r0
+
+# ARG USER_NAME=app
+# RUN addgroup $USER_NAME && adduser -S -G $USER_NAME $USER_NAME
+# USER $USER_NAME
+# WORKDIR /home/$USER_NAME/
+WORKDIR /root/
+
+COPY src src/
+
+CMD ["python", "src/main.py"]
