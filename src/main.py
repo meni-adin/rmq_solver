@@ -5,14 +5,16 @@ import os
 import pathlib
 
 APP_NAME             = 'rmq-solver'
-WORKING_DIR          = pathlib.Path(__file__).parent.resolve()
+WORKING_DIR_PATH     = pathlib.Path(__file__).parent.resolve()
+LANGUAGED_DIR_NAME   = 'languages'
+LANGUAGES_DIR_PATH   = os.path.join(WORKING_DIR_PATH, LANGUAGED_DIR_NAME)
 MODULE_FILE_NAME     = 'runner'
 INVOCATION_FUNC_NAME = 'run'
 LOG_PATH             = 'myapp.log'
 PROG_LANGUAGES = [
     # 'ada',
     # 'basic',
-    # 'c',
+    'c',
     # 'c++',
     # 'cobol',
     # 'cs',
@@ -61,7 +63,7 @@ def run():
         try:
             run_language(lang)
         except(Exception):
-            logging.info(f'{lang.capitalize()} runner ended successfully')
+            logging.error(f'{lang.capitalize()} run failed')
 
 def configure_logging():
     logging.basicConfig(level=logging.DEBUG,
@@ -84,15 +86,19 @@ def run_language(lang):
 
 def run_solver(lang):
     args = ['-i', 'inputDir']
-    module = importlib.import_module(f'{lang}.{MODULE_FILE_NAME}')
+    module = importlib.import_module(f'languages.{lang}.{MODULE_FILE_NAME}')
     logger = logging.getLogger(f'{APP_NAME}.{lang}')
     logging.info(f'Calling {lang.capitalize()} runner...')
-    exec(f'module.{INVOCATION_FUNC_NAME}(logger, args)')
+    try:
+        exec(f'module.{INVOCATION_FUNC_NAME}(logger, args)')
+    except(Exception):
+        logging.exception(f'Error while running {lang.capitalize()} solver:')
+        raise Exception()
     logging.info(f'{lang.capitalize()} runner ended successfully')
 
 def verify_output(lang):
     logging.info(f'Verifying output...')
-    output_path = f'{WORKING_DIR}/{lang}/output'
+    output_path = f'{LANGUAGES_DIR_PATH}/{lang}/output'
     if not os.path.isdir(output_path):
         logging.error(f'{output_path} is missing')
         exit(1)

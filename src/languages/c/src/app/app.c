@@ -4,5 +4,6 @@
 int main(int argc, char *argv[])
 {
     printf("Hello world!\n");
-    return 0;
+    fprintf(stderr, "This is an error message\n");
+    return 1;
 }

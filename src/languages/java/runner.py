@@ -9,13 +9,6 @@ BUILD_DIR = "build"
 EXEC_NAME = "app"
 
 def run(logger, args):
-    try:
-        _run(logger, args)
-    except(Exception):
-        logger.exception("")
-        raise Exception("Java run failed")
-
-def _run(logger, args):
     global LOGGER
     LOGGER = logger
     logger.info("-- Java Runner --")
@@ -31,7 +24,7 @@ def build():
 
 def execute():
     LOGGER.info("Executing .jar file...")
-    subprocess.check_call(["java", "-jar", "build/libs/rmq_solver-0.11.jar", "input/01_data.txt", "input/01_queries.txt", "output"])
+    subprocess.check_call(["java", "-jar", "build/libs/rmq_solver-0.1.jar", "input/01_data.txt", "input/01_queries.txt", "output"])
     # subprocess.run(["java", "-jar", "build/libs/rmq_solver.jar", "-i", "input", "-o", "output"])
     LOGGER.info(".jar file executed successfully")
 
