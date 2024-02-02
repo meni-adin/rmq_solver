@@ -19,7 +19,8 @@ public class RMQ3<T extends Comparable<T>> extends RMQSolver<T> {
     public void preProcess(ArrayList<T> data) {
         this.data = data;
         normalSectionLength = (int) Math.ceil(Math.sqrt(data.size()));
-        sectionsCount = (data.size() / normalSectionLength) + ((data.size() % normalSectionLength) == 0 ? 0 : 1);
+        sectionsCount = (data.size() / normalSectionLength)
+                + ((data.size() % normalSectionLength) == 0 ? 0 : 1);
         lastSectionLength = data.size() - (normalSectionLength * (sectionsCount - 1));
 
         db = new ArrayList<T>();
@@ -36,8 +37,9 @@ public class RMQ3<T extends Comparable<T>> extends RMQSolver<T> {
             return data.get(startIndex);
 
         if (sectionIdx(startIndex) == sectionIdx(endIndex))
-            if ((endIndex - startIndex + 1 == normalSectionLength) ||
-                    ((sectionIdx(startIndex) == sectionsCount - 1) && (endIndex - startIndex + 1 == lastSectionLength)))
+            if ((endIndex - startIndex + 1 == normalSectionLength)
+                    || ((sectionIdx(startIndex) == sectionsCount - 1)
+                            && (endIndex - startIndex + 1 == lastSectionLength)))
                 return db.get(sectionIdx(startIndex));
             else
                 return minInRange(startIndex, endIndex - startIndex + 1);
@@ -45,7 +47,8 @@ public class RMQ3<T extends Comparable<T>> extends RMQSolver<T> {
         if ((startIndex % normalSectionLength) == 0)
             startMin = db.get(sectionIdx(startIndex));
         else
-            startMin = minInRange(startIndex, ((sectionIdx(startIndex) + 1) * normalSectionLength) - startIndex);
+            startMin = minInRange(startIndex,
+                    ((sectionIdx(startIndex) + 1) * normalSectionLength) - startIndex);
 
         if (((endIndex + 1) % normalSectionLength) == 0)
             endMin = db.get(sectionIdx(endIndex));
@@ -72,10 +75,10 @@ public class RMQ3<T extends Comparable<T>> extends RMQSolver<T> {
         return min;
     }
 
-    private T minInRange(int startIdx, int length) {
+    private T minInRange(int startIdx, int length) { // extract to base class + add data as argument
         T min = data.get(startIdx);
 
-        for (int idx = 0; idx < length; ++idx) {
+        for (int idx = 1; idx < length; ++idx) {
             T current = data.get(startIdx + idx);
             if (current.compareTo(min) < 0)
                 min = current;

@@ -10,12 +10,12 @@ public abstract class RMQSolver<T extends Comparable<T>> {
         this.name = solverName;
     }
 
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
-    abstract public void preProcess(ArrayList<T> data);
+    public abstract void preProcess(ArrayList<T> data);
 
-    abstract T query(int startIndex, int endIndex);
+    public abstract T query(int startIndex, int endIndex);
 
 }

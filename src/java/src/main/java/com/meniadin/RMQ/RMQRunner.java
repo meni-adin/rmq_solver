@@ -5,8 +5,11 @@ import java.util.AbstractMap.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.function.Function;
+// import org.apache.commons.cli.*;
 
 public class RMQRunner {
+
+    // private static final Option ARG_INPUT = new Option("i", "input", true, "this is a description");
 
     public static void main(String[] args) {
         try {
@@ -19,11 +22,13 @@ public class RMQRunner {
 
 }
 
+
 class InnerRMQRunner<T extends Comparable<T>> {
 
     Function<String, T> parser;
     private ArrayList<T> data = new ArrayList<T>();
-    private ArrayList<SimpleEntry<Integer, Integer>> queries = new ArrayList<SimpleEntry<Integer, Integer>>();
+    private ArrayList<SimpleEntry<Integer, Integer>> queries =
+            new ArrayList<SimpleEntry<Integer, Integer>>();
     private ArrayList<RMQSolver<T>> rmqList = new ArrayList<RMQSolver<T>>();
 
     public InnerRMQRunner(Function<String, T> parser) {
@@ -58,12 +63,11 @@ class InnerRMQRunner<T extends Comparable<T>> {
             var line = reader.readLine();
             while (line != null) {
                 try (var scanner = new Scanner(line)) {
-                    scanner.findAll("\\s*(\\d+)\\s*,\\s*(\\d+)\\s*")
-                            .forEach(result -> {
-                                queries.add(new SimpleEntry<Integer, Integer>(
-                                        Integer.parseInt(result.group(1)),
+                    scanner.findAll("\\s*(\\d+)\\s*,\\s*(\\d+)\\s*").forEach(result -> {
+                        queries.add(
+                                new SimpleEntry<Integer, Integer>(Integer.parseInt(result.group(1)),
                                         Integer.parseInt(result.group(2))));
-                            });
+                    });
                 }
                 line = reader.readLine();
             }
@@ -73,14 +77,11 @@ class InnerRMQRunner<T extends Comparable<T>> {
     private void validateQueries() {
         for (var query : queries) {
             if (query.getKey() > query.getValue())
-                throw new IllegalArgumentException(
-                        "Invalid query: start index " + query.getKey() + " is larger than end index "
-                                + query.getValue());
+                throw new IllegalArgumentException("Invalid query: start index " + query.getKey()
+                        + " is larger than end index " + query.getValue());
             if (query.getValue() >= data.size())
-                throw new IllegalArgumentException(
-                        "Invalid query: end index " + query.getValue()
-                                + " designates an element outside the array of size "
-                                + data.size());
+                throw new IllegalArgumentException("Invalid query: end index " + query.getValue()
+                        + " designates an element outside the array of size " + data.size());
         }
     }
 
@@ -95,9 +96,11 @@ class InnerRMQRunner<T extends Comparable<T>> {
         new File(outputDirName).mkdirs();
         for (var rmqSolver : rmqList) {
             rmqSolver.preProcess(data);
-            try (var outputFile = new FileWriter(outputDirName + "/" + rmqSolver.getName() + ".txt")) {
+            try (var outputFile =
+                    new FileWriter(outputDirName + "/" + rmqSolver.getName() + ".txt")) {
                 for (var query : queries)
-                    outputFile.write(rmqSolver.query(query.getKey(), query.getValue()).toString() + "\n");
+                    outputFile.write(
+                            rmqSolver.query(query.getKey(), query.getValue()).toString() + "\n");
             }
         }
     }
