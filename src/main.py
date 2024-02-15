@@ -21,7 +21,7 @@ PROG_LANGUAGES = [
     # 'fortran',
     # 'go',
     # 'haskel',
-    'java',
+    # 'java',
     # 'javascript',
     # 'kotlin',
     # 'lua',
