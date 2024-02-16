@@ -5,3 +5,4 @@ set(CMAKE_C_COMPILER gcc)
 project(rmq_solver C)
 
 add_subdirectory(app)
+add_subdirectory(rmq)
